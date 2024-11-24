@@ -2,7 +2,9 @@
 ![PHP](https://img.shields.io/badge/PHP-%3E%3D%207.4-blue)
 ![License](https://img.shields.io/badge/license-NonCommercial-blue)
 
-**CNPJUtils** é uma biblioteca PHP de código aberto que oferece funções úteis para trabalhar com o novo padrão de CNPJ alfanumérico do Brasil. Esta biblioteca permite calcular dígitos verificadores e validar o formato do CNPJ conforme o novo padrão de doze caracteres alfanuméricos e dois dígitos numéricos.
+**CNPJUtils** é uma biblioteca PHP de código aberto que oferece funções úteis para trabalhar com o novo padrão de CNPJ
+alfanumérico do Brasil. Esta biblioteca permite calcular dígitos verificadores e validar o formato do CNPJ conforme o
+novo padrão de doze caracteres alfanuméricos e dois dígitos numéricos.
 
 ## Funcionalidades
 
@@ -23,7 +25,7 @@ A estrutura do projeto é organizada para facilitar o desenvolvimento modular e 
 ├── src
 │   ├── CNPJ.php              # Classe principal para validação e geração de CNPJ
 │   └── DigitoVerificador.php # Classe auxiliar para cálculo do dígito verificador
-├── ajax                      
+├── ajax
 │   └── processa_cnpj.php     # Processa solicitações AJAX para validação e geração de CNPJ
 ├── assets
 │   └── css
@@ -37,6 +39,16 @@ A estrutura do projeto é organizada para facilitar o desenvolvimento modular e 
 - Navegador com suporte a JavaScript para uso com AJAX
 
 ## Instalação
+
+### Via Composer
+
+1. Para instalar a biblioteca via Composer, execute o seguinte comando:
+
+   ```bash
+   composer require samuelpietro/cnpjutils
+   ```
+
+### Manualmente
 
 1. Clone o repositório:
 
@@ -89,6 +101,54 @@ O arquivo `terminal.php` permite a execução das funcionalidades via linha de c
    php terminal.php -v "12.ABC.345/01DE-35"
    ```
 
+### Uso via Composer
+
+Depois de instalar a biblioteca via Composer, você pode utilizá-la em seu projeto PHP. Aqui estão alguns exemplos de
+uso:
+
+#### 1. Geração de CNPJ
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+use CNPJUtils\CNPJ;
+
+// Gera um CNPJ aleatório
+$cnpj = CNPJ::gerar();
+echo "CNPJ Gerado: " . $cnpj;
+```
+
+#### 2. Cálculo do Dígito Verificador (DV)
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+use CNPJUtils\CNPJ;
+
+// Cálculo do DV para um CNPJ fornecido
+$cnpj = "12.ABC.345/01DE";
+$dv = CNPJ::calcularDV($cnpj);
+echo "Dígito Verificador: " . $dv;
+```
+
+#### 3. Validação de CNPJ
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+use CNPJUtils\CNPJ;
+
+// Valida um CNPJ fornecido
+$cnpj = "12.ABC.345/01DE-35";
+$isValid = CNPJ::validar($cnpj);
+echo $isValid ? "CNPJ Válido" : "CNPJ Inválido";
+```
 
 ## Documentação Técnica
 
