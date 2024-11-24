@@ -3,6 +3,7 @@
   "description": "Funções úteis para gerar e validar números de CNPJ no novo padrão alfanumérico.",
   "type": "library",
   "license": "proprietary",
+  "version": "1.0.0",
   "autoload": {
     "psr-4": {
       "CNPJUtils\\": "src/"
@@ -18,6 +19,14 @@
   "require": {
     "php": ">=7.4"
   },
+  "keywords": [
+    "cnpj",
+    "validar",
+    "alfanumerico",
+    "gerar",
+    "brasil"
+  ],
+  "homepage": "https://github.com/SamuelPietro/cnpjutils",
   "support": {
     "issues": "https://github.com/SamuelPietro/cnpjutils/issues",
     "source": "https://github.com/SamuelPietro/cnpjutils"
