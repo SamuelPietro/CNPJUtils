@@ -1,0 +1,25 @@
+{
+  "name": "samuelpietro/cnpjutils",
+  "description": "Funções úteis para gerar e validar números de CNPJ no novo padrão alfanumérico.",
+  "type": "library",
+  "license": "proprietary",
+  "autoload": {
+    "psr-4": {
+      "CNPJUtils\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Samuel Pietro",
+      "email": "samuelpietro.b@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=7.4"
+  },
+  "support": {
+    "issues": "https://github.com/SamuelPietro/cnpjutils/issues",
+    "source": "https://github.com/SamuelPietro/cnpjutils"
+  }
+}
