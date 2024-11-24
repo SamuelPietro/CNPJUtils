@@ -3,8 +3,6 @@
 ![License](https://img.shields.io/badge/license-NonCommercial-blue)
 
 **CNPJUtils** é uma biblioteca PHP de código aberto que oferece funções úteis para trabalhar com o novo padrão de CNPJ alfanumérico do Brasil. Esta biblioteca permite calcular dígitos verificadores e validar o formato do CNPJ conforme o novo padrão de doze caracteres alfanuméricos e dois dígitos numéricos.
-Descrição
----
 
 ## Funcionalidades
 
@@ -15,7 +13,7 @@ Descrição
 - **Integração com AJAX**: Permite a comunicação assíncrona entre a interface web e o backend, proporcionando uma experiência de usuário mais fluida sem recarregar a página.
 - **Execução via Terminal**: Oferece uma interface de linha de comando que permite a geração e validação de CNPJs diretamente no terminal, útil para desenvolvedores e automação de processos.
 
----
+
 ## Estrutura do Projeto
 A estrutura do projeto é organizada para facilitar o desenvolvimento modular e o uso via navegador, AJAX e terminal.
 
@@ -32,12 +30,12 @@ A estrutura do projeto é organizada para facilitar o desenvolvimento modular e 
 │       └── style.css         # Estilo da interface web
 └── terminal.php              # Executa operações de geração e validação de CNPJ via terminal
 ```
----
+
 ## Requisitos
 - PHP versão 7.4 ou superior
 - Servidor HTTP (ex.: Apache) para rodar a interface web
 - Navegador com suporte a JavaScript para uso com AJAX
----
+
 ## Instalação
 
 1. Clone o repositório:
@@ -99,7 +97,7 @@ O arquivo `terminal.php` permite a execução das funcionalidades via linha de c
 2. Os pesos para o cálculo são distribuídos de 2 a 9, aplicados da direita para a esquerda, reiniciando após o oitavo dígito.
 3. A soma ponderada dos valores ASCII dos caracteres determina os dígitos verificadores conforme o módulo 11.
 
----
+
 ## Contribuindo
 
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests para adicionar melhorias e novas funcionalidades.
@@ -110,7 +108,7 @@ Para enviar pull requests siga os passos abaixo.
 3. Commit suas alterações (`git commit -m 'Minha nova feature'`)
 4. Envie para o repositório (`git push origin minha-feature`)
 5. Abra um pull request
----
+
 ## Licença
 
 Este projeto está licenciado sob uma licença de uso não comercial livre e uso comercial com atribuição:
