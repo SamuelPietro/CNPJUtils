@@ -1,14 +1,21 @@
-CNPJUtils License
+Licença MIT
+===========
 
-This project is licensed under a dual license:
+Copyright (c) 2024 Samuel Pietro / CNPJUtils
 
-1. **Non-Commercial Use**:
-   - You are free to use, modify, and distribute this software for non-commercial purposes.
-   - Attribution to the original author, Samuel Pietro, is required.
+A permissão é concedida, gratuitamente, a qualquer pessoa que obtenha uma cópia deste software e dos arquivos de
+documentação associados (o "Software"), para lidar com o Software sem restrição, incluindo, sem limitação, os direitos
+de usar, copiar, modificar, mesclar, publicar, distribuir, sublicenciar e/ou vender cópias do Software, e permitir que
+as pessoas a quem o Software é fornecido o façam, sujeitas às seguintes condições:
 
-2. **Commercial Use**:
-   - You are permitted to use, modify, and distribute this software for commercial purposes.
-   - Attribution to the original author, Samuel Pietro, is required.
-   - The original credit must be maintained even after modifications.
+A condição acima é que o aviso de direitos autorais e esta permissão sejam incluídos em todas as cópias ou partes
+substanciais do Software.
 
-**© 2024 Samuel Pietro / CNPJUtils**
+Além disso, a atribuição ao autor original, Samuel Pietro, deve ser mantida em todas as cópias, modificações ou
+distribuições do Software.
+
+O SOFTWARE É FORNECIDO "COMO ESTÁ", SEM GARANTIA DE QUALQUER TIPO, EXPRESSA OU IMPLÍCITA, INCLUINDO, MAS NÃO SE
+LIMITANDO ÀS GARANTIAS DE COMERCIABILIDADE, ADEQUAÇÃO A UM DETERMINADO FIM E NÃO VIOLAÇÃO. EM NENHUM CASO OS AUTORES
+OU DETENTORES DOS DIREITOS AUTORAIS SERÃO RESPONSÁVEIS POR QUALQUER REIVINDICAÇÃO, DANOS OU OUTRA RESPONSABILIDADE,
+SEJA EM UMA AÇÃO DE CONTRATO, DELITO OU DE OUTRA FORMA, DECORRENTE DE, FORA DE OU EM CONEXÃO COM O SOFTWARE OU O USO OU
+OUTRAS NEGOCIAÇÕES NO SOFTWARE.
