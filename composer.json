@@ -3,7 +3,7 @@
   "description": "Funções úteis para gerar e validar números de CNPJ no novo padrão alfanumérico.",
   "type": "library",
   "license": "proprietary",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "autoload": {
     "psr-4": {
       "CNPJUtils\\": "src/"
@@ -17,7 +17,10 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "php": ">=7.4"
+    "php": ">=8.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9"
   },
   "keywords": [
     "cnpj",

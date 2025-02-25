@@ -9,38 +9,31 @@ novo padrão de doze caracteres alfanuméricos e dois dígitos numéricos.
 ## Funcionalidades
 
 - **Geração de CNPJ**: Cria um CNPJ aleatório que respeita o formato e as regras de validação, podendo ser usado para testes ou preenchimentos automáticos.
-- **Cálculo do dígito verificador (DV)**: Gera os dois dígitos verificadores para um CNPJ alfanumérico, garantindo que o número esteja correto de acordo com as regras estabelecidas pela legislação brasileira.
 - **Validação de CNPJ**: Confirma se um CNPJ segue o formato padrão e está devidamente estruturado, validando a conformidade dos caracteres e a correta formação dos dígitos verificadores.
-- **Interface Web Intuitiva**: Proporciona uma interface amigável para usuários não técnicos, permitindo interações fáceis para gerar e validar CNPJs.
-- **Integração com AJAX**: Permite a comunicação assíncrona entre a interface web e o backend, proporcionando uma experiência de usuário mais fluida sem recarregar a página.
-- **Execução via Terminal**: Oferece uma interface de linha de comando que permite a geração e validação de CNPJs diretamente no terminal, útil para desenvolvedores e automação de processos.
-
+- **Formatar/Mascarar**: Formata um CNPJ alfanumérico para um formato legível, com a máscara padrão de pontuação e separação de caracteres.
+- **Remover mascara**: Remove a formatação de um CNPJ, retornando apenas os caracteres alfanuméricos.
+- **Cálcular dígitos verificadores (DV)**: Gera os dois dígitos verificadores para um CNPJ alfanumérico, garantindo que o número esteja correto conforme as regras estabelecidas pela legislação brasileira.
 
 ## Estrutura do Projeto
-A estrutura do projeto é organizada para facilitar o desenvolvimento modular e o uso via navegador, AJAX e terminal.
+A estrutura do projeto é organizada para facilitar o desenvolvimento modular.
 
 ```plaintext
 /project-root
-├── index.php                 # Interface de usuário para geração e validação (HTML/CSS/JavaScript)
 ├── src
+│   ├── Interfaces
+│   │   └── CNPJInterface.php  # Interface para validação e geração de CNPJ
 │   ├── CNPJ.php              # Classe principal para validação e geração de CNPJ
 │   └── DigitoVerificador.php # Classe auxiliar para cálculo do dígito verificador
-├── ajax
-│   └── processa_cnpj.php     # Processa solicitações AJAX para validação e geração de CNPJ
-├── assets
-│   └── css
-│       └── style.css         # Estilo da interface web
-└── terminal.php              # Executa operações de geração e validação de CNPJ via terminal
+├── tests
+│   ├── CNPJTest.php          # Testes unitários para validação e geração de CNPJ
+│   └── DigitoVerificadorTest.php # Testes unitários para cálculo do dígito verificador
 ```
 
 ## Requisitos
-- PHP versão 7.4 ou superior
-- Servidor HTTP (ex.: Apache) para rodar a interface web
-- Navegador com suporte a JavaScript para uso com AJAX
+- PHP versão 8.0 ou superior
 
 ## Instalação
 
-### Via Composer
 
 1. Para instalar a biblioteca via Composer, execute o seguinte comando:
 
@@ -48,107 +41,41 @@ A estrutura do projeto é organizada para facilitar o desenvolvimento modular e 
    composer require samuelpietro/cnpjutils
    ```
 
-### Manualmente
-
-1. Clone o repositório:
-
-   ```bash
-   git clone https://github.com/seu-usuario/cnpjutils.git
-   cd cnpjutils
-   ```
-
-2. Instale o projeto em um servidor HTTP, ou use o PHP embutido:
-
-   ```bash
-   php -S localhost:8000
-   ```
-
-3. Acesse `http://localhost:8000/index.php` para utilizar a interface web.
-
 ## Uso
-
-### Interface Web
-
-A interface web está em `index.php` e permite ao usuário:
-
-1. **Validar um CNPJ**: Digite o CNPJ e selecione "Validar CNPJ".
-2. **Gerar um CNPJ**: Selecione "Gerar CNPJ" para criar automaticamente um novo CNPJ.
-3. **Gerar DV**: Calcule o DV de um CNPJ fornecido.
-
-A comunicação com o servidor é feita através de AJAX, e o resultado é exibido na área de resposta da interface.
-
-### Uso via Terminal
-
-O arquivo `terminal.php` permite a execução das funcionalidades via linha de comando, ideal para integrações com scripts de automação e uso em ambientes de desenvolvimento.
-
-#### Exemplo de Uso
 
 1. Para gerar um CNPJ:
 
-   ```bash
-   php terminal.php -g
+   ```php
+   $cnpj = new \CNPJUtils\CNPJ();
+   $cnpjGerado = $cnpj->gerar(); // Retorna uma ‘string’ contendo um número aleatório do CNPJ.
+   ```
+2. Para validar a formatação/mascara de um CNPJ:
+
+   ```php
+   $cnpj = new \CNPJUtils\CNPJ();
+   $cnpjFormatado = $cnpj->valid('12.ABC.345/01DE-35'); // Retorna um booleano
+   ```
+3. Para mascarar um CNPJ:
+
+   ```php
+   $cnpj = new \CNPJUtils\CNPJ();
+   $cnpjValido = $cnpj->mascarar('12ABC34501DE35'); // Retorna uma string contendo o CNPJ formatado
    ```
 
-2. Para gerar o dígito verificador (DV) de um CNPJ fornecido:
+4. Para remover a mascara de um CNPJ:
 
-   ```bash
-   php terminal.php -dv "12.ABC.345/01DE"
+   ```php
+    $cnpj = new \CNPJUtils\CNPJ();
+    $cnpjSemMascara = $cnpj->removerMascara('12.ABC.345/01DE-35'); // Retorna uma ‘string’ contendo o CNPJ sem a máscara
    ```
+   
+5. Para calcular os dígitos verificadores de um CNPJ:
 
-3. Para validar um CNPJ existente:
+   ```php
+    $digitoVerificador = new \CNPJUtils\DigitoVerificador();
+    $dv = $digitoVerificador->calcularDigitos('12ABC34501DE'); // Retorna uma ‘string’ contendo os dígitos verificadores
+    ```
 
-   ```bash
-   php terminal.php -v "12.ABC.345/01DE-35"
-   ```
-
-### Uso via Composer
-
-Depois de instalar a biblioteca via Composer, você pode utilizá-la em seu projeto PHP. Aqui estão alguns exemplos de
-uso:
-
-#### 1. Geração de CNPJ
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-use CNPJUtils\CNPJ;
-
-// Gera um CNPJ aleatório
-$cnpj = CNPJ::gerar();
-echo "CNPJ Gerado: " . $cnpj;
-```
-
-#### 2. Cálculo do Dígito Verificador (DV)
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-use CNPJUtils\CNPJ;
-
-// Cálculo do DV para um CNPJ fornecido
-$cnpj = "12.ABC.345/01DE";
-$dv = CNPJ::calcularDV($cnpj);
-echo "Dígito Verificador: " . $dv;
-```
-
-#### 3. Validação de CNPJ
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-use CNPJUtils\CNPJ;
-
-// Valida um CNPJ fornecido
-$cnpj = "12.ABC.345/01DE-35";
-$isValid = CNPJ::validar($cnpj);
-echo $isValid ? "CNPJ Válido" : "CNPJ Inválido";
-```
 
 ## Documentação Técnica
 

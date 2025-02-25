@@ -4,71 +4,82 @@ declare(strict_types=1);
 
 namespace CNPJUtils;
 
-/**
- * Classe para calcular os dígitos verificadores do CNPJ alfanumérico.
- */
-class DigitoVerificador
+use InvalidArgumentException;
+use CNPJUtils\Interfaces\DigitoVerificadorInterface;
+
+class DigitoVerificador implements DigitoVerificadorInterface
 {
-    private string $baseCNPJ;
-    private array $pesos = [];
 
     /**
-     * Construtor da classe DigitoVerificador.
-     *
-     * @param string $baseCNPJ O CNPJ sem os dígitos verificadores.
+     * Converte um caractere no seu valor numérico para o cálculo.
+     * Usa: valor = ord(caractere) - 48
+     * (assim, '0'→0, '9'→9 e, para letras, por exemplo, 'A' (65) → 17).
      */
-    public function __construct(string $baseCNPJ)
-    {
-        $this->baseCNPJ = strtoupper($baseCNPJ);
-    }
-
-    /**
-     * Converte um caractere alfanumérico em valor numérico para cálculo do DV.
-     *
-     * @param string $caractere Um caractere alfanumérico do CNPJ.
-     * @return int Valor numérico do caractere.
-     */
-    private function calculaAscii(string $caractere): int
+    private function calcularAscii(string $caractere): int
     {
         return ord($caractere) - 48;
     }
 
     /**
-     * Calcula a soma dos produtos entre valores alfanuméricos e pesos, para o cálculo do DV.
+     * Gera um vetor de pesos dinâmicos para o cálculo do DV.
+     * A lógica é: repetir range(2,9) quantas vezes forem necessárias para
+     * cobrir o tamanho desejado, cortar para esse tamanho e inverter a ordem.
      *
-     * @return int A soma dos produtos.
+     * @param int $tamanho Número de elementos desejados.
+     * @return array Vetor de pesos.
      */
-    private function calculaSoma(): int
+    private function gerarPesos(int $tamanho): array
     {
-        $tamanhoRange = strlen($this->baseCNPJ);
-        $numRange = (int)ceil($tamanhoRange / 8);
-
-        // Preenche a lista de pesos, de 2 a 9, conforme necessário para o tamanho do CNPJ
+        $pesos = [];
+        $numRange = (int)ceil($tamanho / 8);
         for ($i = 0; $i < $numRange; $i++) {
-            $this->pesos = array_merge($this->pesos, range(2, 9));
+            $pesos = array_merge($pesos, range(2, 9));
         }
-
-        $this->pesos = array_slice($this->pesos, 0, $tamanhoRange);
-        $this->pesos = array_reverse($this->pesos);
-
-        // Calcula o produto dos valores com os pesos e retorna a soma
-        return array_sum(
-            array_map(
-                fn($char, $peso) => $this->calculaAscii($char) * $peso,
-                str_split($this->baseCNPJ),
-                $this->pesos
-            )
-        );
+        $pesos = array_slice($pesos, 0, $tamanho);
+        return array_reverse($pesos);
     }
 
     /**
-     * Calcula o dígito verificador com base na soma dos produtos.
+     * Calcula um dígito verificador para a string informada,
+     * usando a lógica de soma ponderada e regra do módulo 11.
      *
-     * @return int O dígito verificador (0-9).
+     * @param string $texto Base para cálculo (deve conter apenas caracteres válidos).
+     * @return int Dígito verificador calculado.
      */
-    public function calcula(): int
+    private function calcularDigito(string $texto): int
     {
-        $modSoma = $this->calculaSoma() % 11;
-        return $modSoma < 2 ? 0 : 11 - $modSoma;
+        $tamanho = strlen($texto);
+        $pesos = $this->gerarPesos($tamanho);
+        $soma = 0;
+        for ($i = 0; $i < $tamanho; $i++) {
+            $valor = $this->calcularAscii($texto[$i]);
+            $soma += $valor * $pesos[$i];
+        }
+        $mod = $soma % 11;
+        return ($mod < 2) ? 0 : (11 - $mod);
+    }
+
+    /**
+     * Calcula os dois dígitos verificadores do CNPJ alfanumérico.
+     * O CNPJ base (sem os dígitos) deve ter exatamente 12 caracteres.
+     *
+     * @param string $cnpj CNPJ possivelmente com máscara.
+     * @return string Os dois dígitos verificadores concatenados.
+     * @throws InvalidArgumentException Se a base não tiver 12 caracteres.
+     */
+    public function calcularDigitos(string $cnpj): string
+    {
+        if (strlen($cnpj) !== 12) {
+            throw new InvalidArgumentException("O CNPJ (base) deve ter exatamente 12 caracteres sem máscara.");
+        }
+
+        // Calcula o primeiro dígito (DV1) usando a base de 12 caracteres
+        $dv1 = $this->calcularDigito($cnpj);
+
+        // Para o segundo dígito, anexa o primeiro dígito à base (ficando 13 caracteres)
+        $baseComDv1 = $cnpj . $dv1;
+        $dv2 = $this->calcularDigito($baseComDv1);
+
+        return "{$dv1}{$dv2}";
     }
 }
