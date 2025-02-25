@@ -18,7 +18,7 @@ class CNPJ
      * Construtor da classe CNPJ.
      *
      * @param string $cnpj O CNPJ a ser validado ou gerado (sem DV ou com DV).
-     * @throws Exception Se o formato do CNPJ não for válido.
+     * @throws Exception Se o formato do CNPJ for inválido.
      */
     public function __construct(string $cnpj)
     {
@@ -73,6 +73,7 @@ class CNPJ
      * Gera os dois dígitos verificadores do CNPJ.
      *
      * @return string Os dígitos verificadores concatenados.
+     * @throws Exception Se houver um erro no cálculo dos dígitos verificadores.
      */
     public function geraDV(): string
     {
@@ -88,7 +89,7 @@ class CNPJ
      * Gera um CNPJ alfanumérico válido aleatório no formato padrão aa.aaa.aaa/aaaa-dd.
      *
      * A função gera os 12 primeiros caracteres do CNPJ, que podem ser números ou letras maiúsculas
-     * (alfanuméricos), e calcula os dois dígitos verificadores de acordo com as regras estabelecidas.
+     * (alfanuméricos), e calcula os dois dígitos verificadores conforme as regras estabelecidas.
      *
      * @return string CNPJ gerado no formato aa.aaa.aaa/aaaa-dd.
      * @throws Exception Caso haja um erro na geração dos caracteres aleatórios.
@@ -119,6 +120,7 @@ class CNPJ
      * Valida o CNPJ verificando seus dígitos verificadores.
      *
      * @return bool True se o CNPJ for válido, False caso contrário.
+     * @throws Exception Se houver um erro no cálculo dos dígitos verificadores.
      */
     public function valida(): bool
     {
