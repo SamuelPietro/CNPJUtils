@@ -1,5 +1,5 @@
 # CNPJUtils
-![PHP](https://img.shields.io/badge/PHP-%3E%3D%207.4-blue)
+![PHP](https://img.shields.io/badge/PHP-%3E%3D%208.0-blue)
 ![License](https://img.shields.io/badge/license-mit-blue)
 
 **CNPJUtils** é uma biblioteca PHP de código aberto que oferece funções úteis para trabalhar com o novo padrão de CNPJ
