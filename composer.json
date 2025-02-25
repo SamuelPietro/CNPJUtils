@@ -3,7 +3,6 @@
   "description": "Funções úteis para gerar e validar números de CNPJ no novo padrão alfanumérico.",
   "type": "library",
   "license": "proprietary",
-  "version": "2.0.0",
   "autoload": {
     "psr-4": {
       "CNPJUtils\\": "src/"
