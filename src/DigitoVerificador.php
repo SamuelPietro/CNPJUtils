@@ -9,28 +9,28 @@ namespace CNPJUtils;
  */
 class DigitoVerificador
 {
-    private string $cnpj;
+    private string $baseCNPJ;
     private array $pesos = [];
 
     /**
      * Construtor da classe DigitoVerificador.
      *
-     * @param string $cnpj O CNPJ sem os dígitos verificadores.
+     * @param string $baseCNPJ O CNPJ sem os dígitos verificadores.
      */
-    public function __construct(string $cnpj)
+    public function __construct(string $baseCNPJ)
     {
-        $this->cnpj = strtoupper($cnpj);
+        $this->baseCNPJ = strtoupper($baseCNPJ);
     }
 
     /**
      * Converte um caractere alfanumérico em valor numérico para cálculo do DV.
      *
-     * @param string $caracter Um caractere alfanumérico do CNPJ.
+     * @param string $caractere Um caractere alfanumérico do CNPJ.
      * @return int Valor numérico do caractere.
      */
-    private function calculaAscii(string $caracter): int
+    private function calculaAscii(string $caractere): int
     {
-        return ord($caracter) - 48;
+        return ord($caractere) - 48;
     }
 
     /**
@@ -40,7 +40,7 @@ class DigitoVerificador
      */
     private function calculaSoma(): int
     {
-        $tamanhoRange = strlen($this->cnpj);
+        $tamanhoRange = strlen($this->baseCNPJ);
         $numRange = (int)ceil($tamanhoRange / 8);
 
         // Preenche a lista de pesos, de 2 a 9, conforme necessário para o tamanho do CNPJ
@@ -52,15 +52,13 @@ class DigitoVerificador
         $this->pesos = array_reverse($this->pesos);
 
         // Calcula o produto dos valores com os pesos e retorna a soma
-        $somaProdutos = array_sum(
+        return array_sum(
             array_map(
                 fn($char, $peso) => $this->calculaAscii($char) * $peso,
-                str_split($this->cnpj),
+                str_split($this->baseCNPJ),
                 $this->pesos
             )
         );
-
-        return $somaProdutos;
     }
 
     /**

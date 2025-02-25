@@ -26,18 +26,18 @@ class CNPJ
             throw new Exception("CNPJ inválido! O formato esperado é aa.aaa.aaa/aaaa-dd para validação, ou aa.aaa.aaa/aaaa para geração do DV.");
         }
 
-        $this->cnpj = $this->removePontuacao($cnpj);
+        $this->cnpj = $this->removeCaracteresEspeciais($cnpj);
     }
 
     /**
-     * Remove pontuações do CNPJ, mantendo apenas caracteres alfanuméricos.
+     * Remove Caracteres especiais do CNPJ, mantendo apenas caracteres alfanuméricos.
      *
      * @param string $cnpj O CNPJ original.
-     * @return string O CNPJ sem pontuação.
+     * @return string O CNPJ sem caracteres especiais.
      */
-    private function removePontuacao(string $cnpj): string
+    private function removeCaracteresEspeciais(string $cnpj): string
     {
-        return preg_replace('/[^\w]/', '', $cnpj);
+        return preg_replace('/\W/', '', $cnpj);
     }
 
     /**
@@ -66,7 +66,7 @@ class CNPJ
      */
     private function validaFormato(string $cnpj): bool
     {
-        return (bool)preg_match('/(^([A-Z]|\d){2}\.([A-Z]|\d){3}\.([A-Z]|\d){3}\/([A-Z]|\d){4}(\-\d{2})?$)/', $cnpj);
+        return (bool)preg_match('/(^([A-Z]|\d){2}\.([A-Z]|\d){3}\.([A-Z]|\d){3}\/([A-Z]|\d){4}(-\d{2})?$)/', $cnpj);
     }
 
     /**
@@ -82,7 +82,7 @@ class CNPJ
         $dv1 = (new DigitoVerificador($this->cnpjSemDV))->calcula();
         $dv2 = (new DigitoVerificador($this->cnpjSemDV . $dv1))->calcula();
 
-        return "{$dv1}{$dv2}";
+        return "$dv1$dv2";
     }
 
     /**
@@ -127,6 +127,6 @@ class CNPJ
         $this->removeDigitos();
         $dvGerado = $this->geraDV();
 
-        return $this->cnpj === "{$this->cnpjSemDV}{$dvGerado}";
+        return $this->cnpj === "$this->cnpjSemDV$dvGerado";
     }
 }
