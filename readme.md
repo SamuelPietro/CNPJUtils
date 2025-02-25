@@ -1,6 +1,6 @@
 # CNPJUtils
 ![PHP](https://img.shields.io/badge/PHP-%3E%3D%207.4-blue)
-![License](https://img.shields.io/badge/license-NonCommercial-blue)
+![License](https://img.shields.io/badge/license-mit-blue)
 
 **CNPJUtils** é uma biblioteca PHP de código aberto que oferece funções úteis para trabalhar com o novo padrão de CNPJ
 alfanumérico do Brasil. Esta biblioteca permite calcular dígitos verificadores e validar o formato do CNPJ conforme o
@@ -171,10 +171,9 @@ Para enviar pull requests siga os passos abaixo.
 
 ## Licença
 
-Este projeto está licenciado sob uma licença de uso não comercial livre e uso comercial com atribuição:
-
-- **Uso não comercial**: Modificação, cópia e redistribuição são permitidas para fins não comerciais.
-- **Uso comercial**: Permitido com atribuição ao autor original, mantendo o crédito original mesmo após modificações.
+Este projeto está licenciado sob a Licença MIT, que permite o uso, modificação e distribuição do software para qualquer
+finalidade, desde que a atribuição ao autor original, Samuel Pietro, seja mantida em todas as cópias, modificações ou
+distribuições do Software.
 
 **© 2024 Samuel Pietro / CNPJUtils**
 
