@@ -7,13 +7,6 @@ use CNPJUtils\CNPJ;
 
 class CNPJTest extends TestCase
 {
-    private CNPJ $cnpj;
-
-    protected function setUp(): void
-    {
-        require_once __DIR__ . '/../vendor/autoload.php';
-        $this->cnpj = new CNPJ();
-    }
 
     /**
      * Testa a geração de um CNPJ alfanumérico válido.
@@ -21,7 +14,8 @@ class CNPJTest extends TestCase
      */
     public function testGerarCnpj(): void
     {
-        $cnpj = $this->cnpj->gerar();
+        $cnpj = CNPJ::gerar();
+        $this->assertIsString($cnpj);
         $this->assertMatchesRegularExpression('/^[A-Z0-9]{2}\.[A-Z0-9]{3}\.[A-Z0-9]{3}\/[A-Z0-9]{4}-\d{2}$/', $cnpj);
     }
 
@@ -30,16 +24,17 @@ class CNPJTest extends TestCase
      */
     public function testValidarCnpj(): void
     {
-        $cnpjValido = 'AB.123.456/7890-12';
-        $this->assertFalse($this->cnpj->validar($cnpjValido)); // Não há como gerar um CNPJ válido fixo aqui
+        $cnpjValido = 'AB123456789012';
+        $this->assertFalse(CNPJ::validar($cnpjValido));
     }
 
     /**
-     * Testa a geração dos dígitos verificadores de um CNPJ.
+     * Testa a formatação de um CNPJ.
      */
     public function testMascarar(): void
     {
-        $this->assertEquals('AB.123.456/7890-12', $this->cnpj->mascarar('AB123456789012'));
+        $this->assertEquals('AB.123.456/7890-12', CNPJ::mascarar('AB123456789012'));
+        $this->assertEquals('12.345.678/9012-34', CNPJ::mascarar('12345678901234'));
     }
 
     /**
@@ -47,7 +42,8 @@ class CNPJTest extends TestCase
      */
     public function testRemoverMascara(): void
     {
-        $this->assertEquals('AB123456789012', $this->cnpj->removerMascara('AB.123.456/7890-12'));
-        $this->assertEquals('12345678901234', $this->cnpj->removerMascara('12.345.678/9012-34'));
+        $this->assertEquals('AB123456789012', CNPJ::removerMascara('AB.123.456/7890-12'));
+        $this->assertEquals('12345678901234', CNPJ::removerMascara('12.345.678/9012-34'));
     }
+
 }

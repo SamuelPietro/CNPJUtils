@@ -93,15 +93,15 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar
 Para enviar pull requests siga os passos abaixo.
 1. Faça um fork do repositório
 2. Crie uma branch (`git checkout -b minha-feature`)
-3. Commit suas alterações (`git commit -m 'Minha nova feature'`)
+3. Commit as suas alterações (`git commit -m 'Minha nova feature'`)
 4. Envie para o repositório (`git push origin minha-feature`)
 5. Abra um pull request
 
 ## Licença
 
-Este projeto está licenciado sob a Licença MIT, que permite o uso, modificação e distribuição do software para qualquer
+Este projeto está licenciado sob a Licença MIT, que permite o uso, modificação e distribuição do ‘software’ para qualquer
 finalidade, desde que a atribuição ao autor original, Samuel Pietro, seja mantida em todas as cópias, modificações ou
-distribuições do Software.
+distribuições do ‘Software’.
 
 **© 2024 Samuel Pietro / CNPJUtils**
 
