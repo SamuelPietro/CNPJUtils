@@ -46,34 +46,35 @@ A estrutura do projeto é organizada para facilitar o desenvolvimento modular.
 1. Para gerar um CNPJ:
 
    ```php
-   $cnpj = new \CNPJUtils\CNPJ();
-   $cnpjGerado = $cnpj->gerar(); // Retorna uma ‘string’ contendo um número aleatório do CNPJ.
+   use CNPJUtils\CNPJ;
+   CNPJ::gerar(); // Retorna uma ‘string’ contendo um CNPJ aleatório
    ```
-2. Para validar a formatação/mascara de um CNPJ:
+2. Para validar a formatação/máscara de um CNPJ:
 
    ```php
-   $cnpj = new \CNPJUtils\CNPJ();
-   $cnpjFormatado = $cnpj->valid('12.ABC.345/01DE-35'); // Retorna um booleano
+   use CNPJUtils\CNPJ;
+   CNPJ::validar('12ABC34501DE35'); // Retorna true se o CNPJ for válido e false se for inválido
    ```
+   
 3. Para mascarar um CNPJ:
 
    ```php
-   $cnpj = new \CNPJUtils\CNPJ();
-   $cnpjValido = $cnpj->mascarar('12ABC34501DE35'); // Retorna uma string contendo o CNPJ formatado
+   use CNPJUtils\CNPJ;
+   CNPJ::mascarar('12ABC34501DE35'); // Retorna uma ‘string’ contendo o CNPJ formatado
    ```
 
-4. Para remover a mascara de um CNPJ:
+4. Para remover a máscara de um CNPJ:
 
    ```php
-    $cnpj = new \CNPJUtils\CNPJ();
-    $cnpjSemMascara = $cnpj->removerMascara('12.ABC.345/01DE-35'); // Retorna uma ‘string’ contendo o CNPJ sem a máscara
+   use CNPJUtils\CNPJ;
+   CNPJ::removerMascara('12.ABC.345/01DE-35'); // Retorna uma ‘string’ contendo o CNPJ sem máscara
    ```
    
 5. Para calcular os dígitos verificadores de um CNPJ:
 
    ```php
-    $digitoVerificador = new \CNPJUtils\DigitoVerificador();
-    $dv = $digitoVerificador->calcularDigitos('12ABC34501DE'); // Retorna uma ‘string’ contendo os dígitos verificadores
+    use CNPJUtils\DigitoVerificador();
+    DigitoVerificador::calcular('12ABC34501DE'); // Retorna uma ‘string’ contendo os dígitos verificadores
     ```
 
 

@@ -16,5 +16,5 @@ interface DigitoVerificadorInterface
      * @return string Os dígitos verificadores calculados.
      * @throws Exception Caso haja um erro no cálculo dos dígitos verificadores.
      */
-    public function calcularDigitos(string $cnpj): string;
+    public static function calcular(string $cnpj): string;
 }

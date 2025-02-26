@@ -15,7 +15,7 @@ class DigitoVerificador implements DigitoVerificadorInterface
      * Usa: valor = ord(caractere) - 48
      * (assim, '0'→0, '9'→9 e, para letras, por exemplo, 'A' (65) → 17).
      */
-    private function calcularAscii(string $caractere): int
+    private static function calcularAscii(string $caractere): int
     {
         return ord($caractere) - 48;
     }
@@ -28,7 +28,7 @@ class DigitoVerificador implements DigitoVerificadorInterface
      * @param int $tamanho Número de elementos desejados.
      * @return array Vetor de pesos.
      */
-    private function gerarPesos(int $tamanho): array
+    private static function gerarPesos(int $tamanho): array
     {
         $pesos = [];
         $numRange = (int)ceil($tamanho / 8);
@@ -46,13 +46,13 @@ class DigitoVerificador implements DigitoVerificadorInterface
      * @param string $texto Base para cálculo (deve conter apenas caracteres válidos).
      * @return int Dígito verificador calculado.
      */
-    private function calcularDigito(string $texto): int
+    private static function calcularDigito(string $texto): int
     {
         $tamanho = strlen($texto);
-        $pesos = $this->gerarPesos($tamanho);
+        $pesos = self::gerarPesos($tamanho);
         $soma = 0;
         for ($i = 0; $i < $tamanho; $i++) {
-            $valor = $this->calcularAscii($texto[$i]);
+            $valor = self::calcularAscii($texto[$i]);
             $soma += $valor * $pesos[$i];
         }
         $mod = $soma % 11;
@@ -67,18 +67,18 @@ class DigitoVerificador implements DigitoVerificadorInterface
      * @return string Os dois dígitos verificadores concatenados.
      * @throws InvalidArgumentException Se a base não tiver 12 caracteres.
      */
-    public function calcularDigitos(string $cnpj): string
+    public static function calcular(string $cnpj): string
     {
         if (strlen($cnpj) !== 12) {
             throw new InvalidArgumentException("O CNPJ (base) deve ter exatamente 12 caracteres sem máscara.");
         }
 
         // Calcula o primeiro dígito (DV1) usando a base de 12 caracteres
-        $dv1 = $this->calcularDigito($cnpj);
+        $dv1 = self::calcularDigito($cnpj);
 
         // Para o segundo dígito, anexa o primeiro dígito à base (ficando 13 caracteres)
         $baseComDv1 = $cnpj . $dv1;
-        $dv2 = $this->calcularDigito($baseComDv1);
+        $dv2 = self::calcularDigito($baseComDv1);
 
         return "{$dv1}{$dv2}";
     }
