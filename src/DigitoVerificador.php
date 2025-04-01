@@ -7,6 +7,9 @@ namespace CNPJUtils;
 use InvalidArgumentException;
 use CNPJUtils\Interfaces\DigitoVerificadorInterface;
 
+/**
+ * Classe para cálculo de dígitos verificadores.
+ */
 class DigitoVerificador implements DigitoVerificadorInterface
 {
 
