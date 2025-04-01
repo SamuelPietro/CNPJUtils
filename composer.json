@@ -28,6 +28,11 @@
     "gerar",
     "brasil"
   ],
+  "extra": {
+    "branch-alias": {
+      "dev-master": "2.1.x-dev"
+    }
+  },
   "homepage": "https://github.com/SamuelPietro/cnpjutils",
   "support": {
     "issues": "https://github.com/SamuelPietro/cnpjutils/issues",
