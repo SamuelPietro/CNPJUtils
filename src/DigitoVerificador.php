@@ -12,7 +12,6 @@ use CNPJUtils\Interfaces\DigitoVerificadorInterface;
  */
 class DigitoVerificador implements DigitoVerificadorInterface
 {
-
     /**
      * Converte um caractere no seu valor numérico para o cálculo.
      * Usa: valor = ord(caractere) - 48
