@@ -5,6 +5,9 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use CNPJUtils\CNPJ;
 
+/**
+ * Testes para a classe CNPJ
+ */
 class CNPJTest extends TestCase
 {
 
