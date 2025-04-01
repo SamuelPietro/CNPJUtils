@@ -10,7 +10,6 @@ use CNPJUtils\CNPJ;
  */
 class CNPJTest extends TestCase
 {
-
     /**
      * Testa a geração de um CNPJ alfanumérico válido.
      * @throws Exception Caso haja um erro na geração dos caracteres aleatórios.
