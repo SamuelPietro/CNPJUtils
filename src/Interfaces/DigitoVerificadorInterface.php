@@ -8,7 +8,6 @@ use Exception;
 
 interface DigitoVerificadorInterface
 {
-
     /**
      * Calcula os dígitos verificadores de um CNPJ.
      *

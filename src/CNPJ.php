@@ -12,7 +12,6 @@ use CNPJUtils\Interfaces\CNPJInterface;
  */
 class CNPJ implements CNPJInterface
 {
-
     /**
      * Gera um CNPJ alfanumérico válido aleatório no formato padrão aa.aaa.aaa/aaaa-dd.
      *
