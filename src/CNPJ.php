@@ -69,7 +69,7 @@ class CNPJ implements CNPJInterface
         }
         $cnpjLimpo = self::removerMascara($cnpj);
         $base = substr($cnpjLimpo, 0, -2);
-        $digitos = DigitoVerificador::calcular($cnpj);
+        $digitos = DigitoVerificador::calcular($base);
 
         return $cnpjLimpo === "$base$digitos";
 
