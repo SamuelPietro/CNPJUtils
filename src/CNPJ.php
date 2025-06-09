@@ -13,6 +13,11 @@ use CNPJUtils\Interfaces\CNPJInterface;
 class CNPJ implements CNPJInterface
 {
     /**
+     * Letras proibidas no CNPJ alfanumérico conforme especificação ENCAT
+     */
+    private const LETRAS_PROIBIDAS = ['I', 'O', 'U', 'Q', 'F'];
+
+    /**
      * Gera um CNPJ alfanumérico válido aleatório no formato padrão aa.aaa.aaa/aaaa-dd.
      *
      * A função gera os 12 primeiros caracteres do CNPJ, que podem ser números ou letras maiúsculas
@@ -23,8 +28,8 @@ class CNPJ implements CNPJInterface
      */
     public static function gerar(): string
     {
-        // Definindo o conjunto de caracteres alfanuméricos permitidos (0-9, A-Z).
-        $caracteres = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        // Definindo o conjunto de caracteres alfanuméricos permitidos (0-9, A-Z exceto letras proibidas)
+        $caracteres = '0123456789ABCDEGHJKLMPRSTVWXYZ';
         $cnpj = '';
 
         // Gerando aleatoriamente os 12 caracteres iniciais do CNPJ
@@ -51,8 +56,20 @@ class CNPJ implements CNPJInterface
             return false;
         }
 
-        return $cnpj === self::mascarar($cnpjLimpo);
+        // Verifica se os dois últimos caracteres são dígitos
+        if (!ctype_digit(substr($cnpjLimpo, -2))) {
+            return false;
+        }
 
+        // Verifica se há letras proibidas nos 12 primeiros caracteres
+        $base = substr($cnpjLimpo, 0, 12);
+        foreach (self::LETRAS_PROIBIDAS as $letra) {
+            if (str_contains($base, $letra)) {
+                return false;
+            }
+        }
+
+        return $cnpj === self::mascarar($cnpjLimpo);
     }
 
     /**
@@ -66,14 +83,14 @@ class CNPJ implements CNPJInterface
         if (!self::validarFormato($cnpj)) {
             return false;
         }
+
         $cnpjLimpo = self::removerMascara($cnpj);
-        $base = substr($cnpjLimpo, 0, -2);
-        $digitos = DigitoVerificador::calcular($base);
+        $base = substr($cnpjLimpo, 0, 12);
+        $digitos = substr($cnpjLimpo, -2);
+        $digitosCalculados = DigitoVerificador::calcular($base);
 
-        return $cnpjLimpo === "$base$digitos";
-
+        return $digitos === $digitosCalculados;
     }
-
 
     /**
      * Formata um CNPJ alfanumérico no formato padrão aa.aaa.aaa/aaaa-dd.
@@ -86,7 +103,6 @@ class CNPJ implements CNPJInterface
         $cnpjLimpo = self::removerMascara($cnpj);
         return preg_replace('/^(\w{2})(\w{3})(\w{3})(\w{4})(\d{2})$/', '$1.$2.$3/$4-$5', $cnpjLimpo);
     }
-
 
     /**
      * Remove todos os caracteres que não sejam letras ou dígitos.
