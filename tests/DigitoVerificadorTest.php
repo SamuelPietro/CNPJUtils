@@ -20,18 +20,18 @@ class DigitoVerificadorTest extends TestCase
         $digitos = DigitoVerificador::calcular($cnpjBase);
         $this->assertIsString($digitos);
         $this->assertMatchesRegularExpression('/^\d{2}$/', $digitos);
-        
+
         // Teste com CNPJ alfanumérico
         $cnpjBase = '12ABC34501DE';
         $digitos = DigitoVerificador::calcular($cnpjBase);
         $this->assertIsString($digitos);
         $this->assertMatchesRegularExpression('/^\d{2}$/', $digitos);
-        
+
         // Teste com CNPJ que resulta em DV = 0
         $cnpjBase = '000000000000';
         $digitos = DigitoVerificador::calcular($cnpjBase);
         $this->assertEquals('00', $digitos);
-        
+
         // Teste com CNPJ que resulta em DV = 1
         $cnpjBase = '000000000001';
         $digitos = DigitoVerificador::calcular($cnpjBase);
@@ -46,7 +46,7 @@ class DigitoVerificadorTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         DigitoVerificador::calcular('12345678'); // Deve ter 12 caracteres
     }
-    
+
     /**
      * Testa o cálculo de dígitos verificadores com caracteres inválidos.
      */
@@ -55,7 +55,7 @@ class DigitoVerificadorTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         DigitoVerificador::calcular('12345678901!'); // Caractere especial inválido
     }
-    
+
     /**
      * Testa o cálculo de dígitos verificadores com letras proibidas.
      */
@@ -64,7 +64,7 @@ class DigitoVerificadorTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         DigitoVerificador::calcular('12345678901I'); // Letra I proibida
     }
-    
+
     /**
      * Testa o cálculo de dígitos verificadores com diferentes combinações de letras permitidas.
      */
@@ -74,17 +74,17 @@ class DigitoVerificadorTest extends TestCase
         $digitos = DigitoVerificador::calcular('12ABC34501DE');
         $this->assertIsString($digitos);
         $this->assertMatchesRegularExpression('/^\d{2}$/', $digitos);
-        
+
         // Teste com letras G-L
         $digitos = DigitoVerificador::calcular('12GHJ34501KL');
         $this->assertIsString($digitos);
         $this->assertMatchesRegularExpression('/^\d{2}$/', $digitos);
-        
+
         // Teste com letras M-T
         $digitos = DigitoVerificador::calcular('12MPR34501ST');
         $this->assertIsString($digitos);
         $this->assertMatchesRegularExpression('/^\d{2}$/', $digitos);
-        
+
         // Teste com letras V-Z
         $digitos = DigitoVerificador::calcular('12VWX34501YZ');
         $this->assertIsString($digitos);

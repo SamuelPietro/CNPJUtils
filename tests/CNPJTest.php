@@ -32,7 +32,7 @@ class CNPJTest extends TestCase
         $this->assertTrue(CNPJ::validar('05.475.103/0001-21'));
         $this->assertTrue(CNPJ::validar('20.971.057/0001-45'));
 
-        
+
         // CNPJ alfanumérico válido
         $this->assertTrue(CNPJ::validar('12.ABC.345/01DE-35'));
         $this->assertTrue(CNPJ::validar('12.GHI.345/01JK-03'));
@@ -58,18 +58,18 @@ class CNPJTest extends TestCase
         $this->assertFalse(CNPJ::validar('12.ABC.345/01DE-3')); // Faltando um dígito
         $this->assertFalse(CNPJ::validar('12.ABC.345/01DE-35X')); // Dígito extra
         $this->assertFalse(CNPJ::validar('12.ABC.345/01DE-XX')); // Dígitos não numéricos
-        
+
         // Mais casos de formato inválido
         $this->assertFalse(CNPJ::validar('12.ABC.345/01DE')); // Sem dígitos verificadores
         $this->assertFalse(CNPJ::validar('12.ABC.345/01DE-3')); // Apenas um dígito verificador
         $this->assertFalse(CNPJ::validar('12.ABC.345/01DE-3X')); // Segundo dígito não numérico
         $this->assertFalse(CNPJ::validar('12.ABC.345/01DE-X3')); // Primeiro dígito não numérico
-        
+
         // CNPJs com caracteres especiais inválidos
         $this->assertFalse(CNPJ::validar('12.ABC.345/01DE-35!')); // Caractere especial no final
         $this->assertFalse(CNPJ::validar('12.ABC.345/01DE-35 ')); // Espaço no final
         $this->assertFalse(CNPJ::validar('12.ABC.345/01DE-35.')); // Ponto no final
-        
+
         // CNPJs com dígitos verificadores incorretos
         $this->assertFalse(CNPJ::validar('12.ABC.345/01DE-34')); // Dígitos verificadores errados
         $this->assertFalse(CNPJ::validar('12.ABC.345/01DE-36')); // Dígitos verificadores errados
@@ -83,11 +83,11 @@ class CNPJTest extends TestCase
         $this->assertEquals('AB.123.456/7890-12', CNPJ::mascarar('AB123456789012'));
         $this->assertEquals('12.345.678/9012-34', CNPJ::mascarar('12345678901234'));
         $this->assertEquals('12.ABC.345/01DE-35', CNPJ::mascarar('12ABC34501DE35'));
-        
+
         // Testes com CNPJs já mascarados
         $this->assertEquals('AB.123.456/7890-12', CNPJ::mascarar('AB.123.456/7890-12'));
         $this->assertEquals('12.345.678/9012-34', CNPJ::mascarar('12.345.678/9012-34'));
-        
+
         // Testes com CNPJs em diferentes formatos
         $this->assertEquals('AB.123.456/7890-12', CNPJ::mascarar('AB123456789012'));
         $this->assertEquals('AB.123.456/7890-12', CNPJ::mascarar('AB.123.456.7890.12'));
@@ -102,11 +102,11 @@ class CNPJTest extends TestCase
         $this->assertEquals('AB123456789012', CNPJ::removerMascara('AB.123.456/7890-12'));
         $this->assertEquals('12345678901234', CNPJ::removerMascara('12.345.678/9012-34'));
         $this->assertEquals('12ABC34501DE35', CNPJ::removerMascara('12.ABC.345/01DE-35'));
-        
+
         // Testes com CNPJs sem máscara
         $this->assertEquals('AB123456789012', CNPJ::removerMascara('AB123456789012'));
         $this->assertEquals('12345678901234', CNPJ::removerMascara('12345678901234'));
-        
+
         // Testes com CNPJs em diferentes formatos
         $this->assertEquals('AB123456789012', CNPJ::removerMascara('AB.123.456.7890.12'));
         $this->assertEquals('AB123456789012', CNPJ::removerMascara('AB-123-456-7890-12'));
@@ -126,7 +126,7 @@ class CNPJTest extends TestCase
             $this->assertTrue(CNPJ::validar($cnpj));
             $cnpjs[] = $cnpj;
         }
-        
+
         // Verifica se todos os CNPJs gerados são únicos
         $this->assertCount(100, array_unique($cnpjs), 'Todos os CNPJs gerados devem ser únicos');
     }
