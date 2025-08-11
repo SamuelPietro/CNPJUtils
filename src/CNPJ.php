@@ -10,11 +10,31 @@ use InvalidArgumentException;
 
 /**
  * Classe CNPJ para geração e validação de CNPJs alfanuméricos.
+ *
+ * Esta classe implementa a funcionalidade completa para trabalhar com CNPJs alfanuméricos
+ * conforme a especificação ENCAT, incluindo:
+ * - Geração de CNPJs válidos aleatórios
+ * - Validação de CNPJs existentes (formato e dígitos verificadores)
+ * - Formatação (aplicação de máscara) e remoção de máscara
+ * - Suporte a caracteres alfanuméricos (0-9, A-Z exceto I, O, U, Q, F)
+ *
+ * @package CNPJUtils
+ * @author CNPJUtils Team
+ * @since 1.0.0
  */
 class CNPJ implements CNPJInterface
 {
     /**
-     * Letras proibidas no CNPJ alfanumérico conforme especificação ENCAT
+     * Letras proibidas no CNPJ alfanumérico conforme especificação ENCAT.
+     *
+     * Estas letras são proibidas para evitar confusão visual:
+     * - I: pode ser confundida com 1 (um)
+     * - O: pode ser confundida com 0 (zero)
+     * - U: pode ser confundida com V
+     * - Q: pode ser confundida com O
+     * - F: reservada para uso futuro
+     *
+     * @var array<string>
      */
     private const LETRAS_PROIBIDAS = ['I', 'O', 'U', 'Q', 'F'];
 
@@ -45,10 +65,16 @@ class CNPJ implements CNPJInterface
     }
 
     /**
-     * Verifica se o Formato do CNPJ está correto.
+     * Verifica se o formato do CNPJ está correto.
      *
-     * @param string $cnpj O CNPJ a ser validado.
-     * @return bool True se o formato estiver correto, False caso contrário.
+     * Valida:
+     * - Formato com máscara: XX.XXX.XXX/XXXX-XX
+     * - Comprimento de 14 caracteres após remoção da máscara
+     * - Últimos 2 caracteres devem ser dígitos numéricos
+     * - Ausência de letras proibidas nos 12 primeiros caracteres
+     *
+     * @param string $cnpj O CNPJ a ser validado (com ou sem máscara)
+     * @return bool True se o formato estiver correto, False caso contrário
      */
     private static function validarFormato(string $cnpj): bool
     {
@@ -83,10 +109,17 @@ class CNPJ implements CNPJInterface
     }
 
     /**
-     * Formata um CNPJ alfanumérico no formato padrão aa.aaa.aaa/aaaa-dd.
+     * Valida um CNPJ alfanumérico completo.
      *
-     * @param string $cnpj O CNPJ a ser formatado.
-     * @return bool True se o CNPJ estiver correto e valido, False caso contrário.
+     * Executa validação completa do CNPJ:
+     * 1. Verifica o formato (estrutura, comprimento, caracteres permitidos)
+     * 2. Calcula e verifica os dígitos verificadores
+     * 3. Trata exceções durante o processo de validação
+     *
+     * @param string $cnpj O CNPJ a ser validado (com ou sem máscara)
+     * @return bool True se o CNPJ estiver correto e válido, False caso contrário
+     * @see validarFormato() Para validação apenas do formato
+     * @see DigitoVerificador::calcular() Para cálculo dos dígitos verificadores
      */
     public static function validar(string $cnpj): bool
     {
@@ -107,10 +140,16 @@ class CNPJ implements CNPJInterface
     }
 
     /**
-     * Formata um CNPJ alfanumérico no formato padrão aa.aaa.aaa/aaaa-dd.
+     * Formata um CNPJ alfanumérico aplicando a máscara padrão.
      *
-     * @param string $cnpj O CNPJ a ser formatado.
-     * @return string O CNPJ formatado.
+     * Aplica a máscara no formato: XX.XXX.XXX/XXXX-XX
+     * onde X representa caracteres alfanuméricos e os dois últimos são dígitos.
+     *
+     * Se a formatação por regex falhar, retorna o CNPJ limpo sem máscara.
+     *
+     * @param string $cnpj O CNPJ a ser formatado (com ou sem máscara)
+     * @return string O CNPJ formatado com máscara
+     * @see removerMascara() Para operação inversa
      */
     public static function mascarar(string $cnpj): string
     {
@@ -122,10 +161,18 @@ class CNPJ implements CNPJInterface
     }
 
     /**
-     * Remove todos os caracteres que não sejam letras ou dígitos.
+     * Remove a máscara do CNPJ, mantendo apenas caracteres alfanuméricos.
      *
-     * @param string $cnpj CNPJ possivelmente com máscara.
-     * @return string CNPJ sem máscara.
+     * Remove todos os caracteres que não sejam:
+     * - Dígitos (0-9)
+     * - Letras maiúsculas (A-Z)
+     *
+     * Converte automaticamente letras minúsculas para maiúsculas.
+     * Se a remoção por regex falhar, retorna string vazia.
+     *
+     * @param string $cnpj CNPJ possivelmente com máscara
+     * @return string CNPJ sem máscara (apenas caracteres alfanuméricos)
+     * @see mascarar() Para operação inversa
      */
     public static function removerMascara(string $cnpj): string
     {
