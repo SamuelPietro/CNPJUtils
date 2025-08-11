@@ -6,5 +6,4 @@ parameters:
         - vendor
     ignoreErrors:
         # Ignore specific errors if needed
-    checkMissingIterableValueType: false
     reportUnmatchedIgnoredErrors: false
