@@ -1,4 +1,32 @@
-/composer.lock
-/composer.phar
+# Composer
 /vendor/
+composer.lock
+composer.phar
+
+# PHPUnit
+/.phpunit.result.cache
+/coverage-html/
+coverage.xml
+junit.xml
+
+# IDE
 /.idea/
+/.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+
+# Cache
+/.php-cs-fixer.cache
