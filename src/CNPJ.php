@@ -116,7 +116,9 @@ class CNPJ implements CNPJInterface
     {
         $cnpjLimpo = self::removerMascara($cnpj);
 
-        return preg_replace('/^(\w{2})(\w{3})(\w{3})(\w{4})(\d{2})$/', '$1.$2.$3/$4-$5', $cnpjLimpo);
+        $resultado = preg_replace('/^(\w{2})(\w{3})(\w{3})(\w{4})(\d{2})$/', '$1.$2.$3/$4-$5', $cnpjLimpo);
+
+        return $resultado ?? $cnpjLimpo;
     }
 
     /**
@@ -127,6 +129,8 @@ class CNPJ implements CNPJInterface
      */
     public static function removerMascara(string $cnpj): string
     {
-        return preg_replace('/[^A-Z0-9]/', '', strtoupper($cnpj));
+        $resultado = preg_replace('/[^A-Z0-9]/', '', strtoupper($cnpj));
+
+        return $resultado ?? '';
     }
 }
