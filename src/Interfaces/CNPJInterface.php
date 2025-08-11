@@ -6,7 +6,6 @@ namespace CNPJUtils\Interfaces;
 
 interface CNPJInterface
 {
-
     /**
      * Gera um CNPJ válido.
      *

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
 use CNPJUtils\DigitoVerificador;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Testes para a classe DigitoVerificador
@@ -89,5 +89,12 @@ class DigitoVerificadorTest extends TestCase
         $digitos = DigitoVerificador::calcular('12VWX34501YZ');
         $this->assertIsString($digitos);
         $this->assertMatchesRegularExpression('/^\d{2}$/', $digitos);
+    }
+
+    public function testCalculoDvComExemplo(): void
+    {
+        $cnpj = '12ABC34501DE';
+        $dvs = DigitoVerificador::calcular($cnpj);
+        $this->assertEquals('35', $dvs);
     }
 }

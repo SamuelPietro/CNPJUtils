@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace CNPJUtils;
 
-use Exception;
 use CNPJUtils\Interfaces\CNPJInterface;
+use Exception;
+use InvalidArgumentException;
 
 /**
  * Classe CNPJ para geração e validação de CNPJs alfanuméricos.
@@ -51,7 +52,16 @@ class CNPJ implements CNPJInterface
      */
     private static function validarFormato(string $cnpj): bool
     {
+        $cnpj = strtoupper($cnpj);
+
+        // Verifica se o formato com máscara está correto
+        if (!preg_match('/^[A-Z0-9]{2}\.[A-Z0-9]{3}\.[A-Z0-9]{3}\/[A-Z0-9]{4}-\d{2}$/', $cnpj)) {
+            return false;
+        }
+
         $cnpjLimpo = self::removerMascara($cnpj);
+
+        // Verifica se tem 14 caracteres
         if (strlen($cnpjLimpo) !== 14) {
             return false;
         }
@@ -69,7 +79,7 @@ class CNPJ implements CNPJInterface
             }
         }
 
-        return $cnpj === self::mascarar($cnpjLimpo);
+        return true;
     }
 
     /**
@@ -80,16 +90,20 @@ class CNPJ implements CNPJInterface
      */
     public static function validar(string $cnpj): bool
     {
-        if (!self::validarFormato($cnpj)) {
+        try {
+            if (!self::validarFormato($cnpj)) {
+                return false;
+            }
+
+            $cnpjLimpo = self::removerMascara($cnpj);
+            $base = substr($cnpjLimpo, 0, 12);
+            $digitos = substr($cnpjLimpo, -2);
+            $digitosCalculados = DigitoVerificador::calcular($base);
+
+            return $digitos === $digitosCalculados;
+        } catch (InvalidArgumentException $e) {
             return false;
         }
-
-        $cnpjLimpo = self::removerMascara($cnpj);
-        $base = substr($cnpjLimpo, 0, 12);
-        $digitos = substr($cnpjLimpo, -2);
-        $digitosCalculados = DigitoVerificador::calcular($base);
-
-        return $digitos === $digitosCalculados;
     }
 
     /**
@@ -101,6 +115,7 @@ class CNPJ implements CNPJInterface
     public static function mascarar(string $cnpj): string
     {
         $cnpjLimpo = self::removerMascara($cnpj);
+
         return preg_replace('/^(\w{2})(\w{3})(\w{3})(\w{4})(\d{2})$/', '$1.$2.$3/$4-$5', $cnpjLimpo);
     }
 

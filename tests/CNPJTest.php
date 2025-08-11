@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
 use CNPJUtils\CNPJ;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Testes para a classe CNPJ
@@ -35,13 +35,13 @@ class CNPJTest extends TestCase
 
         // CNPJ alfanumérico válido
         $this->assertTrue(CNPJ::validar('12.ABC.345/01DE-35'));
-        $this->assertTrue(CNPJ::validar('12.GHI.345/01JK-03'));
+        $this->assertTrue(CNPJ::validar('12.GHJ.345/01KL-72'));
 
         // CNPJs com diferentes combinações de letras permitidas
         $this->assertTrue(CNPJ::validar('12.ABC.345/01DE-35')); // A, B, C, D, E
-        $this->assertTrue(CNPJ::validar('12.GHJ.345/01KL-35')); // G, H, J, K, L
-        $this->assertTrue(CNPJ::validar('12.MPR.345/01ST-35')); // M, P, R, S, T
-        $this->assertTrue(CNPJ::validar('12.VWX.345/01YZ-35')); // V, W, X, Y, Z
+        $this->assertTrue(CNPJ::validar('12.GHJ.345/01KL-72')); // G, H, J, K, L
+        $this->assertTrue(CNPJ::validar('12.MPR.345/01ST-49')); // M, P, R, S, T
+        $this->assertTrue(CNPJ::validar('12.VWX.345/01YZ-05')); // V, W, X, Y, Z
     }
 
     /**
