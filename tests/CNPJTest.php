@@ -27,15 +27,23 @@ class CNPJTest extends TestCase
      */
     public function testValidarCnpjValidos(): void
     {
-        // CNPJ numérico válido
+        // CNPJ numérico válido (com máscara)
         $this->assertTrue(CNPJ::validar('51.090.626/0001-77'));
         $this->assertTrue(CNPJ::validar('05.475.103/0001-21'));
         $this->assertTrue(CNPJ::validar('20.971.057/0001-45'));
 
+        // CNPJ numérico válido (sem máscara)
+        $this->assertTrue(CNPJ::validar('51090626000177'));
+        $this->assertTrue(CNPJ::validar('05475103000121'));
+        $this->assertTrue(CNPJ::validar('20971057000145'));
 
-        // CNPJ alfanumérico válido
+        // CNPJ alfanumérico válido (com máscara)
         $this->assertTrue(CNPJ::validar('12.ABC.345/01DE-35'));
         $this->assertTrue(CNPJ::validar('12.GHJ.345/01KL-72'));
+
+        // CNPJ alfanumérico válido (sem máscara)
+        $this->assertTrue(CNPJ::validar('12ABC34501DE35'));
+        $this->assertTrue(CNPJ::validar('12GHJ34501KL72'));
 
         // CNPJs com diferentes combinações de letras permitidas
         $this->assertTrue(CNPJ::validar('12.ABC.345/01DE-35')); // A, B, C, D, E
@@ -73,6 +81,11 @@ class CNPJTest extends TestCase
         // CNPJs com dígitos verificadores incorretos
         $this->assertFalse(CNPJ::validar('12.ABC.345/01DE-34')); // Dígitos verificadores errados
         $this->assertFalse(CNPJ::validar('12.ABC.345/01DE-36')); // Dígitos verificadores errados
+
+        // CNPJs inválidos sem máscara
+        $this->assertFalse(CNPJ::validar('12ABC34501DE34')); // Dígitos verificadores errados
+        $this->assertFalse(CNPJ::validar('51090626000178')); // Dígitos verificadores errados
+        $this->assertFalse(CNPJ::validar('12ABC34501IF35')); // Contém letras proibidas (I, F)
     }
 
     /**

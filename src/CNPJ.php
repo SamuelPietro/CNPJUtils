@@ -69,6 +69,7 @@ class CNPJ implements CNPJInterface
      *
      * Valida:
      * - Formato com máscara: XX.XXX.XXX/XXXX-XX
+     * - Formato sem máscara: XXXXXXXXXXXXXX (14 caracteres alfanuméricos)
      * - Comprimento de 14 caracteres após remoção da máscara
      * - Últimos 2 caracteres devem ser dígitos numéricos
      * - Ausência de letras proibidas nos 12 primeiros caracteres
@@ -80,8 +81,11 @@ class CNPJ implements CNPJInterface
     {
         $cnpj = strtoupper($cnpj);
 
-        // Verifica se o formato com máscara está correto
-        if (!preg_match('/^[A-Z0-9]{2}\.[A-Z0-9]{3}\.[A-Z0-9]{3}\/[A-Z0-9]{4}-\d{2}$/', $cnpj)) {
+        // Verifica se o formato está correto (com ou sem máscara)
+        $formatoComMascara = preg_match('/^[A-Z0-9]{2}\.[A-Z0-9]{3}\.[A-Z0-9]{3}\/[A-Z0-9]{4}-\d{2}$/', $cnpj);
+        $formatoSemMascara = preg_match('/^[A-Z0-9]{12}\d{2}$/', $cnpj);
+
+        if (!$formatoComMascara && !$formatoSemMascara) {
             return false;
         }
 
