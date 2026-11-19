@@ -67,15 +67,19 @@ veja a seção [Guia de migração](#guia-de-migração-da-2x-para-a-30).
 
 ### Adicionado
 
-- Configuração do PHP CS Fixer, PHPStan e PHPUnit, regras no `.editorconfig`
-  e CI para testes e análise de código.
+- Configuração do PHP CS Fixer, PHPStan e PHPUnit e regras no `.editorconfig`.
+- CI para testes automatizados e análise de código.
 - Guia de contribuição (`CONTRIBUTING.md`).
 
 ### Modificado
 
-- Validação com verificações de formato e tratamento de caracteres inválidos.
-- Formatação e remoção de máscara com tratamento de fallback.
-- Documentação das classes e interfaces.
+- Formatação do CNPJ e remoção da máscara com tratamento de fallback.
+- Documentação das classes e interfaces `CNPJ` e `DigitoVerificador`.
+
+### Corrigido
+
+- Validação do CNPJ com verificações de formato e tratamento de caracteres
+  inválidos.
 
 ## [2.2.0] - 2025-06-09
 
@@ -112,17 +116,26 @@ veja a seção [Guia de migração](#guia-de-migração-da-2x-para-a-30).
 
 ## [2.0.0] - 2025-02-25
 
+Refatoração completa para uso como biblioteca Composer.
+
 ### Adicionado
 
+- Métodos `mascarar()` e `removerMascara()`.
 - Interfaces `CNPJInterface` e `DigitoVerificadorInterface`.
-- Testes unitários.
+- Estrutura modular dentro de `src/`.
+- Testes unitários para `CNPJ` e `DigitoVerificador`.
 - Workflow de CI para PHP.
 
 ### Modificado
 
-- Versão mínima do PHP: 8.0.
-- Métodos de validação, geração e remoção de máscara refatorados.
+- **Incompatível:** versão mínima do PHP passa a ser a 8.0.
+- Métodos de validação e geração refatorados.
 - Número da versão removido do `composer.json`.
+
+### Removido
+
+- **Incompatível:** interface web (`index.php`), processamento via AJAX
+  (`ajax/`) e execução via terminal (`terminal.php`).
 
 ## [1.0.1] - 2025-02-25
 
@@ -132,7 +145,7 @@ veja a seção [Guia de migração](#guia-de-migração-da-2x-para-a-30).
 
 ### Modificado
 
-- Licença alterada para MIT.
+- Licença alterada para MIT, com atribuição obrigatória ao autor original.
 
 ## [1.0.0] - 2024-11-24
 
