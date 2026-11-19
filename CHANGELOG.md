@@ -5,7 +5,7 @@ Todas as mudanças relevantes deste projeto são registradas neste arquivo.
 O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 e o projeto adota o [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
-## [3.0.0] - não lançada
+## [3.0.0] - 2026-11-19
 
 Adequação às regras oficiais do CNPJ alfanumérico da Receita Federal
 (IN RFB nº 2.229/2024). Contém mudanças incompatíveis com a série 2.x;
@@ -154,7 +154,7 @@ Refatoração completa para uso como biblioteca Composer.
 - Primeira versão: geração, validação e cálculo dos dígitos verificadores do
   CNPJ alfanumérico, distribuída como biblioteca Composer.
 
-[3.0.0]: https://github.com/SamuelPietro/CNPJUtils/compare/v2.3.1...HEAD
+[3.0.0]: https://github.com/SamuelPietro/CNPJUtils/compare/v2.3.1...v3.0.0
 [2.3.1]: https://github.com/SamuelPietro/CNPJUtils/compare/v2.3.0...v2.3.1
 [2.3.0]: https://github.com/SamuelPietro/CNPJUtils/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/SamuelPietro/CNPJUtils/compare/v2.1.2...v2.2.0
