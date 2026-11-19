@@ -12,11 +12,11 @@ use InvalidArgumentException;
  * Classe CNPJ para geração e validação de CNPJs alfanuméricos.
  *
  * Esta classe implementa a funcionalidade completa para trabalhar com CNPJs alfanuméricos
- * conforme a especificação ENCAT, incluindo:
+ * conforme as regras da Receita Federal (IN RFB 2.229/2024), incluindo:
  * - Geração de CNPJs válidos aleatórios
  * - Validação de CNPJs existentes (formato e dígitos verificadores)
  * - Formatação (aplicação de máscara) e remoção de máscara
- * - Suporte a caracteres alfanuméricos (0-9, A-Z exceto I, O, U, Q, F)
+ * - Suporte a caracteres alfanuméricos (0-9, A-Z)
  *
  * @package CNPJUtils
  * @author CNPJUtils Team
@@ -25,18 +25,14 @@ use InvalidArgumentException;
 class CNPJ implements CNPJInterface
 {
     /**
-     * Letras proibidas no CNPJ alfanumérico conforme especificação ENCAT.
-     *
-     * Estas letras são proibidas para evitar confusão visual:
-     * - I: pode ser confundida com 1 (um)
-     * - O: pode ser confundida com 0 (zero)
-     * - U: pode ser confundida com V
-     * - Q: pode ser confundida com O
-     * - F: reservada para uso futuro
-     *
-     * @var array<string>
+     * Conjunto de caracteres permitidos nas 12 primeiras posições do CNPJ.
      */
-    private const LETRAS_PROIBIDAS = ['I', 'O', 'U', 'Q', 'F'];
+    private const CARACTERES = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    /**
+     * Base zerada, que não corresponde a um CNPJ válido.
+     */
+    private const BASE_ZERADA = '000000000000';
 
     /**
      * Gera um CNPJ alfanumérico válido aleatório no formato padrão aa.aaa.aaa/aaaa-dd.
@@ -49,14 +45,15 @@ class CNPJ implements CNPJInterface
      */
     public static function gerar(): string
     {
-        // Definindo o conjunto de caracteres alfanuméricos permitidos (0-9, A-Z exceto letras proibidas)
-        $caracteres = '0123456789ABCDEGHJKLMPRSTVWXYZ';
-        $cnpj = '';
+        $ultimoIndice = strlen(self::CARACTERES) - 1;
 
-        // Gerando aleatoriamente os 12 caracteres iniciais do CNPJ
-        for ($i = 0; $i < 12; $i++) {
-            $cnpj .= $caracteres[random_int(0, strlen($caracteres) - 1)];
-        }
+        // Gerando aleatoriamente os 12 caracteres iniciais do CNPJ (a base zerada é inválida)
+        do {
+            $cnpj = '';
+            for ($i = 0; $i < 12; $i++) {
+                $cnpj .= self::CARACTERES[random_int(0, $ultimoIndice)];
+            }
+        } while ($cnpj === self::BASE_ZERADA);
 
         $digitos = DigitoVerificador::calcular($cnpj);
         $cnpj = $cnpj . $digitos;
@@ -65,60 +62,43 @@ class CNPJ implements CNPJInterface
     }
 
     /**
-     * Verifica se o formato do CNPJ está correto.
+     * Normaliza a entrada para validação.
+     *
+     * Remove espaços das extremidades, converte para maiúsculas e remove
+     * apenas os caracteres da máscara ('.', '/' e '-').
+     *
+     * @param string $cnpj O CNPJ informado (com ou sem máscara)
+     * @return string O CNPJ normalizado
+     */
+    private static function normalizar(string $cnpj): string
+    {
+        return str_replace(['.', '/', '-'], '', strtoupper(trim($cnpj, ' ')));
+    }
+
+    /**
+     * Verifica se o formato do CNPJ (já normalizado) está correto.
      *
      * Valida:
-     * - Formato com máscara: XX.XXX.XXX/XXXX-XX
-     * - Formato sem máscara: XXXXXXXXXXXXXX (14 caracteres alfanuméricos)
-     * - Comprimento de 14 caracteres após remoção da máscara
-     * - Últimos 2 caracteres devem ser dígitos numéricos
-     * - Ausência de letras proibidas nos 12 primeiros caracteres
+     * - 12 caracteres alfanuméricos (0-9, A-Z)
+     * - Seguidos de 2 dígitos numéricos (dígitos verificadores)
      *
-     * @param string $cnpj O CNPJ a ser validado (com ou sem máscara)
+     * @param string $cnpjLimpo O CNPJ normalizado, sem máscara
      * @return bool True se o formato estiver correto, False caso contrário
      */
-    private static function validarFormato(string $cnpj): bool
+    private static function validarFormato(string $cnpjLimpo): bool
     {
-        $cnpj = strtoupper($cnpj);
-
-        // Verifica se o formato está correto (com ou sem máscara)
-        $formatoComMascara = preg_match('/^[A-Z0-9]{2}\.[A-Z0-9]{3}\.[A-Z0-9]{3}\/[A-Z0-9]{4}-\d{2}$/', $cnpj);
-        $formatoSemMascara = preg_match('/^[A-Z0-9]{12}\d{2}$/', $cnpj);
-
-        if (!$formatoComMascara && !$formatoSemMascara) {
-            return false;
-        }
-
-        $cnpjLimpo = self::removerMascara($cnpj);
-
-        // Verifica se tem 14 caracteres
-        if (strlen($cnpjLimpo) !== 14) {
-            return false;
-        }
-
-        // Verifica se os dois últimos caracteres são dígitos
-        if (!ctype_digit(substr($cnpjLimpo, -2))) {
-            return false;
-        }
-
-        // Verifica se há letras proibidas nos 12 primeiros caracteres
-        $base = substr($cnpjLimpo, 0, 12);
-        foreach (self::LETRAS_PROIBIDAS as $letra) {
-            if (str_contains($base, $letra)) {
-                return false;
-            }
-        }
-
-        return true;
+        return preg_match('/^[A-Z0-9]{12}\d{2}\z/', $cnpjLimpo) === 1;
     }
 
     /**
      * Valida um CNPJ alfanumérico completo.
      *
      * Executa validação completa do CNPJ:
-     * 1. Verifica o formato (estrutura, comprimento, caracteres permitidos)
-     * 2. Calcula e verifica os dígitos verificadores
-     * 3. Trata exceções durante o processo de validação
+     * 1. Normaliza a entrada (trim de espaços, maiúsculas, remoção de '.', '/' e '-')
+     * 2. Verifica o formato (12 alfanuméricos + 2 dígitos); qualquer outro caractere invalida
+     * 3. Calcula e verifica os dígitos verificadores
+     *
+     * O CNPJ zerado (00.000.000/0000-00) é sempre inválido.
      *
      * @param string $cnpj O CNPJ a ser validado (com ou sem máscara)
      * @return bool True se o CNPJ estiver correto e válido, False caso contrário
@@ -127,20 +107,19 @@ class CNPJ implements CNPJInterface
      */
     public static function validar(string $cnpj): bool
     {
+        $cnpjLimpo = self::normalizar($cnpj);
+
+        if (!self::validarFormato($cnpjLimpo)) {
+            return false;
+        }
+
         try {
-            if (!self::validarFormato($cnpj)) {
-                return false;
-            }
-
-            $cnpjLimpo = self::removerMascara($cnpj);
-            $base = substr($cnpjLimpo, 0, 12);
-            $digitos = substr($cnpjLimpo, -2);
-            $digitosCalculados = DigitoVerificador::calcular($base);
-
-            return $digitos === $digitosCalculados;
+            $digitosCalculados = DigitoVerificador::calcular(substr($cnpjLimpo, 0, 12));
         } catch (InvalidArgumentException $e) {
             return false;
         }
+
+        return substr($cnpjLimpo, -2) === $digitosCalculados;
     }
 
     /**
@@ -149,19 +128,23 @@ class CNPJ implements CNPJInterface
      * Aplica a máscara no formato: XX.XXX.XXX/XXXX-XX
      * onde X representa caracteres alfanuméricos e os dois últimos são dígitos.
      *
-     * Se a formatação por regex falhar, retorna o CNPJ limpo sem máscara.
-     *
      * @param string $cnpj O CNPJ a ser formatado (com ou sem máscara)
      * @return string O CNPJ formatado com máscara
+     * @throws InvalidArgumentException Se a entrada, depois de limpa, não tiver
+     *                                  12 caracteres alfanuméricos seguidos de 2 dígitos
      * @see removerMascara() Para operação inversa
      */
     public static function mascarar(string $cnpj): string
     {
         $cnpjLimpo = self::removerMascara($cnpj);
 
-        $resultado = preg_replace('/^(\w{2})(\w{3})(\w{3})(\w{4})(\d{2})$/', '$1.$2.$3/$4-$5', $cnpjLimpo);
+        if (!preg_match('/^([A-Z0-9]{2})([A-Z0-9]{3})([A-Z0-9]{3})([A-Z0-9]{4})(\d{2})\z/', $cnpjLimpo, $partes)) {
+            throw new InvalidArgumentException(
+                'O CNPJ deve ter 12 caracteres alfanuméricos seguidos de 2 dígitos numéricos.'
+            );
+        }
 
-        return $resultado ?? $cnpjLimpo;
+        return "{$partes[1]}.{$partes[2]}.{$partes[3]}/{$partes[4]}-{$partes[5]}";
     }
 
     /**
