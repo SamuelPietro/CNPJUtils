@@ -169,6 +169,10 @@ composer test    # apenas os testes
 composer cs-fix  # corrige o estilo do código
 ```
 
+## Histórico de versões
+
+As mudanças de cada versão, incluindo o guia de migração da 2.x para a 3.0, estão no [CHANGELOG.md](CHANGELOG.md).
+
 ## Contribuindo
 
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests para adicionar melhorias e novas funcionalidades.
