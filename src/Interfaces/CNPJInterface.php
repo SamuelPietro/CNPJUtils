@@ -20,7 +20,7 @@ interface CNPJInterface
      * Gera um CNPJ alfanumérico válido aleatório.
      *
      * Gera um CNPJ com:
-     * - 12 caracteres alfanuméricos aleatórios (0-9, A-Z exceto I,O,U,Q,F)
+     * - 12 caracteres alfanuméricos aleatórios (0-9, A-Z)
      * - 2 dígitos verificadores calculados automaticamente
      * - Formatação com máscara aplicada (XX.XXX.XXX/XXXX-XX)
      *
@@ -51,6 +51,8 @@ interface CNPJInterface
      *
      * @param string $cnpj O CNPJ a ser formatado (com ou sem máscara)
      * @return string O CNPJ formatado com máscara
+     * @throws \InvalidArgumentException Se a entrada, depois de limpa, não tiver
+     *                                   12 caracteres alfanuméricos seguidos de 2 dígitos
      */
     public static function mascarar(string $cnpj): string;
 

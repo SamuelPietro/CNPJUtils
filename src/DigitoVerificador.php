@@ -11,11 +11,10 @@ use InvalidArgumentException;
  * Classe especializada para cálculo de dígitos verificadores de CNPJ alfanumérico.
  *
  * Esta classe implementa o algoritmo de cálculo dos dígitos verificadores
- * conforme especificação ENCAT, utilizando:
+ * conforme as regras da Receita Federal (IN RFB 2.229/2024), utilizando:
  * - Conversão de caracteres alfanuméricos para valores numéricos baseados em ASCII
  * - Sistema de pesos dinâmicos (repetição do range 2-9)
  * - Algoritmo de soma ponderada com módulo 11
- * - Tratamento de caso especial para CNPJ '000000000001'
  *
  * @package CNPJUtils
  * @author CNPJUtils Team
@@ -105,15 +104,14 @@ class DigitoVerificador implements DigitoVerificadorInterface
      *
      * Processo de cálculo:
      * 1. Valida formato: exatamente 12 caracteres alfanuméricos
-     * 2. Verifica ausência de letras proibidas (I, O, U, Q, F)
-     * 3. Trata caso especial: '000000000001' sempre retorna '01'
-     * 4. Calcula primeiro dígito (DV1) usando os 12 caracteres
-     * 5. Calcula segundo dígito (DV2) usando os 12 caracteres + DV1
+     * 2. Rejeita a base zerada ('000000000000'), que não é um CNPJ válido
+     * 3. Calcula primeiro dígito (DV1) usando os 12 caracteres
+     * 4. Calcula segundo dígito (DV2) usando os 12 caracteres + DV1
      *
      * @param string $cnpj Base do CNPJ com exatamente 12 caracteres alfanuméricos
-     * @return string Os dois dígitos verificadores concatenados (ex: "01", "45")
+     * @return string Os dois dígitos verificadores concatenados (ex: "91", "35")
      * @throws InvalidArgumentException Se a base não tiver 12 caracteres válidos
-     * @throws InvalidArgumentException Se contiver letras proibidas
+     * @throws InvalidArgumentException Se a base for composta apenas por zeros
      * @see calcularDigito() Para cálculo individual de cada dígito
      */
     public static function calcular(string $cnpj): string
@@ -121,21 +119,13 @@ class DigitoVerificador implements DigitoVerificadorInterface
         $cnpj = strtoupper($cnpj);
 
         // Verifica se contém apenas caracteres válidos
-        if (!preg_match('/^[A-Z0-9]{12}$/', $cnpj)) {
+        if (!preg_match('/^[A-Z0-9]{12}\z/', $cnpj)) {
             throw new InvalidArgumentException("O CNPJ (base) deve ter exatamente 12 caracteres alfanuméricos válidos.");
         }
 
-        // Verifica se contém letras proibidas
-        $letrasProibidas = ['I', 'O', 'U', 'Q', 'F'];
-        foreach ($letrasProibidas as $letra) {
-            if (str_contains($cnpj, $letra)) {
-                throw new InvalidArgumentException("O CNPJ não pode conter a letra proibida: $letra");
-            }
-        }
-
-        // Caso especial para CNPJ '000000000001'
-        if ($cnpj === '000000000001') {
-            return '01';
+        // A base zerada não corresponde a um CNPJ válido
+        if ($cnpj === '000000000000') {
+            throw new InvalidArgumentException("O CNPJ (base) não pode ser composto apenas por zeros.");
         }
 
         // Calcula o primeiro dígito (DV1) usando a base de 12 caracteres
