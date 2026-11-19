@@ -26,16 +26,42 @@ class DigitoVerificadorTest extends TestCase
         $digitos = DigitoVerificador::calcular($cnpjBase);
         $this->assertIsString($digitos);
         $this->assertMatchesRegularExpression('/^\d{2}$/', $digitos);
+    }
 
-        // Teste com CNPJ que resulta em DV = 0
-        $cnpjBase = '000000000000';
-        $digitos = DigitoVerificador::calcular($cnpjBase);
-        $this->assertEquals('00', $digitos);
+    /**
+     * Testa os exemplos oficiais da Receita Federal (IN RFB 2.229/2024).
+     */
+    public function testCalcularDigitosExemplosOficiais(): void
+    {
+        $this->assertSame('35', DigitoVerificador::calcular('12ABC34501DE'));
+        $this->assertSame('12', DigitoVerificador::calcular('00000000E08G'));
+        $this->assertSame('81', DigitoVerificador::calcular('112223330001'));
+    }
 
-        // Teste com CNPJ que resulta em DV = 1
-        $cnpjBase = '000000000001';
-        $digitos = DigitoVerificador::calcular($cnpjBase);
-        $this->assertEquals('01', $digitos);
+    /**
+     * A base '000000000001' segue o cálculo normal (00.000.000/0001-91).
+     */
+    public function testCalcularDigitosBaseUm(): void
+    {
+        $this->assertSame('91', DigitoVerificador::calcular('000000000001'));
+    }
+
+    /**
+     * A base zerada não é um CNPJ válido.
+     */
+    public function testCalcularDigitosComBaseZerada(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        DigitoVerificador::calcular('000000000000');
+    }
+
+    /**
+     * Quebra de linha no final da base não pode ser aceita pela regex.
+     */
+    public function testCalcularDigitosComQuebraDeLinhaNoFinal(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        DigitoVerificador::calcular("12ABC34501DE\n");
     }
 
     /**
@@ -57,18 +83,19 @@ class DigitoVerificadorTest extends TestCase
     }
 
     /**
-     * Testa o cálculo de dígitos verificadores com letras proibidas.
+     * Todas as 26 letras são válidas, inclusive I, O, U, Q e F.
      */
-    public function testCalcularDigitosComLetrasProibidas(): void
+    public function testCalcularDigitosComLetrasIOUQF(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        DigitoVerificador::calcular('12345678901I'); // Letra I proibida
+        $this->assertSame('11', DigitoVerificador::calcular('12345678901I'));
+        $this->assertSame('25', DigitoVerificador::calcular('IOUQF34501DE'));
+        $this->assertSame('25', DigitoVerificador::calcular('iouqf34501de'));
     }
 
     /**
-     * Testa o cálculo de dígitos verificadores com diferentes combinações de letras permitidas.
+     * Testa o cálculo de dígitos verificadores com diferentes combinações de letras.
      */
-    public function testCalcularDigitosComLetrasPermitidas(): void
+    public function testCalcularDigitosComDiferentesLetras(): void
     {
         // Teste com letras A-E
         $digitos = DigitoVerificador::calcular('12ABC34501DE');
