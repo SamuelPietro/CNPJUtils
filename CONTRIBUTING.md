@@ -122,7 +122,7 @@ Exemplo de teste:
 ```php
 public function testValidarCNPJComFormatoCorreto(): void
 {
-    $cnpj = 'AB.CDE.FGH/1234-56';
+    $cnpj = '12.ABC.345/01DE-35';
     $resultado = CNPJ::validar($cnpj);
     
     $this->assertTrue($resultado, 'CNPJ válido deve passar na validação');
@@ -148,7 +148,6 @@ Todos os métodos públicos devem ter documentação completa:
  * @return bool Descrição do retorno
  * @throws InvalidArgumentException Quando o parâmetro é inválido
  * @see OutroMetodo() Para funcionalidade relacionada
- * @since 1.0.0
  */
 public function meuMetodo(string $parametro): bool
 {
@@ -170,7 +169,7 @@ public function meuMetodo(string $parametro): bool
 1. **Sincronize com upstream**
    ```bash
    git fetch upstream
-   git rebase upstream/main
+   git rebase upstream/master
    ```
 
 2. **Execute todos os checks**
@@ -284,7 +283,7 @@ Contexto adicional, exemplos, etc.
 
 ### Branches
 
-- **main**: Branch principal, sempre estável
+- **master**: Branch principal, sempre estável
 - **feature/nome-da-feature**: Para novas funcionalidades
 - **fix/nome-do-bug**: Para correções
 - **docs/descricao**: Para documentação
@@ -299,7 +298,7 @@ Seguimos [Semantic Versioning](https://semver.org/):
 ## 🙋‍♀️ Precisa de Ajuda?
 
 - **Issues**: Use as issues para discussões técnicas
-- **Documentação**: Consulte o README.md e CLAUDE.md
+- **Documentação**: Consulte o README.md e o CHANGELOG.md
 - **Código**: Veja exemplos nos testes
 
 ## 🎉 Reconhecimento
